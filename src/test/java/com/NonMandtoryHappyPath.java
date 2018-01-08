@@ -1,7 +1,7 @@
 //package com;
 //
 //import Tools.ElementsLocations;
-//import Tools.Functions;
+//import Tools.TestFunctions;
 //import org.testng.annotations.Test;
 //
 //import java.awt.*;
@@ -10,8 +10,8 @@
 //
 //    @Test
 //    public void happyPathWithNonMandtoryField () throws AWTException {
-//        ElementsLocations element = new ElementsLocations();
-//        Functions method = new Functions();
+//        Mapping element = new Mapping();
+//        TestFunctions method = new TestFunctions();
 //
 //        //Fills all the none-mandatory fields with proper values.
 //

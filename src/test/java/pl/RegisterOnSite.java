@@ -1,46 +1,39 @@
 package pl;
 
-import Tools.ElementsLocations;
-import Tools.Functions;
-import Tools.Methods;
+import Tools.Mapping;
+import Tools.TestFunctions;
+import Tools.TestMainMethods;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import java.io.FileNotFoundException;
-import java.io.PrintWriter;
 
-public class RegisterOnSite extends Methods{
+public class RegisterOnSite extends TestMainMethods {
 
-    String apartUrl = "https://www.apart.pl/bizuteria";
-    ElementsLocations element = new ElementsLocations();
-    Functions method = new Functions();
-
-    String temporaryMail;
-    String transferPass = method.getRandomPassword(10);
-
-    @Test
-    public void copyTemporaryMail () throws InterruptedException {
-        openTemporaryMailPage();
-        waitUntilPageLoad(element.getTemporaryMail());
-        temporaryMail = element.getTemporaryMail().getAttribute("value");
-        Assert.assertEquals("https://temp-mail.org/pl/",driver.getCurrentUrl());
-    }
+    Mapping element = new Mapping();
+    TestFunctions method = new TestFunctions();
 
     @Test
     public void openTestingPage () throws InterruptedException {
+        logMail=method.copyTemporaryMail();
+        logPass= method.passThePasword();
         openTestingPage(apartUrl);
         waitUntilPageLoad(element.getSignUpBtn());
         Assert.assertEquals(apartUrl,driver.getCurrentUrl());
+
     }
     @Test
-    public void register (){
+    public void registerHappyPath() throws FileNotFoundException {
 
+
+        Assert.assertNotEquals(logMail, null);
+        Assert.assertNotEquals(logPass,null);
         element.getMyApart().click();
-        element.getEmailField().sendKeys(temporaryMail);
+        element.getEmailField().sendKeys(logMail);
         element.getRegisterButton().click();
 
-        element.getPassword2().sendKeys(transferPass);
-        element.getConfirmedPassword2().sendKeys(transferPass);
+        element.getPassword2().sendKeys(logPass);
+        element.getConfirmedPassword2().sendKeys(logPass);
         method.randomClick(element.getTytuł());
         element.getImię().sendKeys(method.getRandomString(5));
         element.getNazwisko().sendKeys(method.getRandomString(5));
@@ -55,13 +48,7 @@ public class RegisterOnSite extends Methods{
         element.getNastepny1().click();
 
         Assert.assertEquals(element.getMyAccount().getText(),"MOJE KONTO");
-
+        method.savePassMailToFile();
     }
-    @Test
-        public  void savePassLoginToFile () throws FileNotFoundException {
-            PrintWriter zapis = new PrintWriter("PassLog.txt");
-            zapis.println(temporaryMail);
-            zapis.println(transferPass);
-            zapis.close();
-        }
+
 }

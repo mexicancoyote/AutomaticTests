@@ -1,20 +1,20 @@
 //package com;
 //
 //import Tools.DriverInstance;
-//import Tools.ElementsLocations;
-//import Tools.Functions;
-//import Tools.Methods;
+//import Tools.Mapping;
+//import Tools.TestFunctions;
+//import Tools.TestMainMethods;
 //import org.openqa.selenium.By;
 //import org.openqa.selenium.firefox.FirefoxDriver;
 //import org.testng.annotations.Test;
 //
-//public class HappyPath extends Methods{
+//public class HappyPath extends TestMainMethods{
 //
 //    @Test
 //    public  void happyPath () throws InterruptedException{
 //        String demoqaURL = "http://demoqa.com/registration/";
-//        ElementsLocations element = new ElementsLocations();
-//        Functions method = new Functions();
+//        Mapping element = new Mapping();
+//        TestFunctions method = new TestFunctions();
 //        DriverInstance instance = new DriverInstance();
 //
 //        //Opens temporary e-mail page, waits to load and copies mail name to String.

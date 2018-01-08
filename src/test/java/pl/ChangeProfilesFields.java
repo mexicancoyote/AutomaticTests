@@ -1,61 +1,35 @@
 package pl;
 
 
-import Tools.ElementsLocations;
-import Tools.Functions;
-import Tools.Methods;
+import Tools.Mapping;
+import Tools.TestFunctions;
+import Tools.TestMainMethods;
 
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.Scanner;
 
-public class ChangeProfilesFields extends Methods{
-    ElementsLocations element = new ElementsLocations();
-    String apartUrl = "https://www.apart.pl/users/login";
-    String temporaryMail;
-    String transferPass;
+public class ChangeProfilesFields extends TestMainMethods {
 
-    @Test
-    public  void odczyt () throws FileNotFoundException {
+    Mapping element = new Mapping();
+    TestFunctions method = new TestFunctions();
+    Loging log = new Loging();
 
-      File file = new File("PassLog.txt");
-      Scanner in = new Scanner(file);
-
-      temporaryMail = in.nextLine();
-      transferPass = in.nextLine();
-       }
     @Test (priority = 1)
     public void openTestingPage () throws InterruptedException {
-        openTestingPage(apartUrl);
+        openTestingPage(apartLogUrl);
         waitUntilPageLoad(element.getEmail());
-        Assert.assertEquals(apartUrl,driver.getCurrentUrl());
+        Assert.assertEquals(apartLogUrl,driver.getCurrentUrl());
+        log.logingHappyPath();
     }
+
     @Test (priority = 2)
-    public void loging (){
-
-        if (temporaryMail!=null && transferPass!=null) {
-            element.getEmail().sendKeys(temporaryMail);
-            element.getPassword1().sendKeys(transferPass);
-            element.getLog().click();
-        }
-        else {
-            element.getEmail().sendKeys("zokoka@ax80mail.com");
-            element.getPassword1().sendKeys("#2N2O*$%#RHPH#^");
-            element.getLog().click();
-        }
-
-    }
-    @Test (priority = 3)
     public void changeProfileFields (){
 
         element.getMyAccount().click();
         element.getMyData().click();
         element.getChangeData().click();
-
-        Functions method = new Functions();
 
         element.getChangeFirstName().sendKeys(method.getRandomString(5));
         element.getChangeLastName().sendKeys(method.getRandomString(5));
