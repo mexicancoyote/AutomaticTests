@@ -2,20 +2,18 @@ package Tools;
 
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
+import org.testng.Assert;
 
 import java.awt.*;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.KeyEvent;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
 
-public class TestFunctions extends TestMainMethods{
-
-    Mapping element = new Mapping();
+public class DataGenerators extends TestMainMethods{
+    Mapping.TempMailSite tempElement = new Mapping.TempMailSite();
     Scanner in;
     /* This method generates random string with established length,
      using variables from methods bellow.*/
@@ -67,52 +65,51 @@ public class TestFunctions extends TestMainMethods{
     }
     // This method copy specified string to clipboard.
 
-    public void clipboardData(String string) throws AWTException {
+    public void clipboardData(String string){
         StringSelection stringSelection = new StringSelection(string);
         Toolkit.getDefaultToolkit().getSystemClipboard().setContents(stringSelection, null);
     }
 
-    // This method paste declared string from clipboard to webelement.
-
-    public void uploadUserPicture() throws AWTException {
-        clipboardData("C:\\Users\\mex\\IdeaProjects\\Automats\\palczak.jpg");
-        //native key strokes for CTRL, V and ENTER keys
-        Robot robot = new Robot();
-        robot.keyPress(KeyEvent.VK_CONTROL);
-        robot.keyPress(KeyEvent.VK_V);
-        robot.keyRelease(KeyEvent.VK_V);
-        robot.keyRelease(KeyEvent.VK_CONTROL);
-        robot.keyPress(KeyEvent.VK_ENTER);
-        robot.keyRelease(KeyEvent.VK_ENTER);
-    }
-
     //Opens temporary e-mail page, waits to load and copies mail name to String.
-    public String copyTemporaryMail () throws InterruptedException {
+    public String copyTemporaryMail (){
         driver.get(temporaryMailSite);
-        waitUntilPageLoad(element.getTemporaryMail());
-        logMail = element.getTemporaryMail().getAttribute("value");
+        waitUntilPageLoad(tempElement.getTemporaryMail());
+        logMail = tempElement.getTemporaryMail().getAttribute("value");
         return logMail;
     }
     public String passThePasword (){
         logPass = getRandomPassword(10);
         return logPass;
     }
-    public  void savePassMailToFile () throws FileNotFoundException {
-        PrintWriter zapis = new PrintWriter("PassLog.txt");
-        zapis.println(logMail);
-        zapis.println(logPass);
-        zapis.close();
+    public  void savePassMailToFile (){
+        try {
+            PrintWriter zapis = new PrintWriter(new FileWriter("PassLog.txt", true));
+            zapis.println(logMail);
+            zapis.println(logPass);
+            zapis.close();
+        }
+        catch(IOException e){
+            Assert.assertTrue(false,"brak dostępu do pliku");
+        }
+
     }
-    public void reader () throws FileNotFoundException {
+    public void reader () {
         File file = new File("PassLog.txt");
-        in = new Scanner(file);
+        if(file.exists() && !file.isDirectory()) {
+            try{
+            in = new Scanner(file);
+            }
+            catch (FileNotFoundException e){
+
+            }
+        }
     }
-    public String loadMailFromFile () throws FileNotFoundException {
+    public String loadMailFromFile (){
         reader();
         logMail = in.nextLine();
         return logMail;
     }
-    public String loadPassFromFile () throws FileNotFoundException {
+    public String loadPassFromFile (){
         reader();
         in.nextLine();
         logPass = in.nextLine();

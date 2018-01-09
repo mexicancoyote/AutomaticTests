@@ -1,7 +1,6 @@
 package pl;
 
-import Tools.Mapping;
-import Tools.TestFunctions;
+import Tools.DataGenerators;
 import Tools.TestMainMethods;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -9,17 +8,23 @@ import org.testng.annotations.Test;
 import java.io.File;
 
 public class Loging extends TestMainMethods{
+    Mapping.TempMailSite tempMailSite = new Mapping.TempMailSite();
+    Mapping.ApartMainPage apartMainPage = new Mapping.ApartMainPage();
+    Mapping.ApartLogPage apartLogPage = new Mapping.ApartLogPage();
+    Mapping.ApartProfilePage apartProfilePage = new Mapping.ApartProfilePage();
 
-    Mapping element = new Mapping();
-    TestFunctions method = new TestFunctions();
+    DataGenerators method = new DataGenerators();
 
-    public void openTestingPage () throws InterruptedException {
-        openTestingPage(apartLogUrl);
-        waitUntilPageLoad(element.getSignUpBtn());
+    public void openTestingPage (){
+        openUrl(apartLogUrl);
+        waitUntilPageLoad(apartLogPage.getSignUpBtn());
         Assert.assertEquals(apartLogUrl,driver.getCurrentUrl());
     }
+    //This method below checks if there is a file with logging values saved after
+    //registration. If there isn't method uses values from saved strings.
+
     @Test
-    public void logingHappyPath () throws InterruptedException {
+    public void loggingHappyPath(){
         openTestingPage();
         File file=new File("PassLog.txt");
 
@@ -30,44 +35,44 @@ public class Loging extends TestMainMethods{
             System.out.println(e.getMessage());
         }
         if (file.length()==0||(logPass.equals("null")&&logMail.equals("null"))) {
-            element.getEmail().sendKeys("zokoka@ax80mail.com");
-            element.getPassword1().sendKeys("#2N2O*$%#RHPH#^");
-            element.getLog().click();
+            tempMailSite.getEmail().sendKeys("zokoka@ax80mail.com");
+            apartProfilePage.getPassword1().sendKeys("#2N2O*$%#RHPH#^");
+            apartProfilePage.getLog().click();
             Assert.assertEquals(apartUrl,driver.getCurrentUrl());
         }
         else {
-            element.getEmail().sendKeys(logMail);
-            element.getPassword1().sendKeys(logPass);
-            element.getLog().click();
+            tempMailSite.getEmail().sendKeys(logMail);
+            apartProfilePage.getPassword1().sendKeys(logPass);
+            apartProfilePage.getLog().click();
             Assert.assertEquals(apartUrl,driver.getCurrentUrl());
         }
-        Assert.assertEquals(element.getMyAccount().getText(),"MOJE KONTO");
+        Assert.assertEquals(apartMainPage.getMyAccount().getText(),"MOJE KONTO");
     }
     @Test
-    public void logingSadPathIncorectMail () throws InterruptedException {
+    public void loggingIncorrectMail (){
         openTestingPage();
-        element.getEmail().sendKeys("z@ax80mail.com");
-        element.getPassword1().sendKeys("#2N2O*$%#RHPH#^");
-        element.getLog().click();
+        tempMailSite.getEmail().sendKeys("z@ax80mail.com");
+        apartProfilePage.getPassword1().sendKeys("#2N2O*$%#RHPH#^");
+        apartProfilePage.getLog().click();
         Assert.assertEquals(apartLogUrl,driver.getCurrentUrl());
-        Assert.assertEquals(element.getErrorLogFailed().getText(),"Błąd logowania! Proszę sprawdzić swój email i hasło");
+        Assert.assertEquals(apartLogPage.getErrorLogFailed().getText(),"Błąd logowania! Proszę sprawdzić swój email i hasło");
     }
     @Test
-    public void logingSadPathIncorectPassword () throws InterruptedException {
+    public void loggingIncorrectPassword (){
         openTestingPage();
-        element.getEmail().sendKeys("zokoka@ax80mail.com");
-        element.getPassword1().sendKeys(method.getRandomString(5));
-        element.getLog().click();
+        tempMailSite.getEmail().sendKeys("zokoka@ax80mail.com");
+        apartProfilePage.getPassword1().sendKeys(method.getRandomString(5));
+        apartProfilePage.getLog().click();
         Assert.assertEquals(apartLogUrl,driver.getCurrentUrl());
-        Assert.assertEquals(element.getErrorLogFailed().getText(),"Błąd logowania! Proszę sprawdzić swój email i hasło");
+        Assert.assertEquals(apartLogPage.getErrorLogFailed().getText(),"Błąd logowania! Proszę sprawdzić swój email i hasło");
     }
     @Test
-    public void logingSadPathIncorectMailFormat () throws InterruptedException {
+    public void logingIncorrectMailFormat (){
         openTestingPage();
-        element.getEmail().sendKeys(method.getRandomString(5));
-        element.getPassword1().sendKeys("#2N2O*$%#RHPH#^");
-        element.getLog().click();
+        tempMailSite.getEmail().sendKeys(method.getRandomString(5));
+        apartProfilePage.getPassword1().sendKeys("#2N2O*$%#RHPH#^");
+        apartProfilePage.getLog().click();
         Assert.assertEquals(apartLogUrl,driver.getCurrentUrl());
-        Assert.assertEquals(element.getErrorInvalidMailFormat().getText(),"Wprowadzony adres email jest nie poprawnego formatu.");
+        Assert.assertEquals(apartLogPage.getErrorInvalidMailFormat().getText(),"Wprowadzony adres email jest nie poprawnego formatu.");
     }
 }

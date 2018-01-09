@@ -23,11 +23,11 @@ public class TestMainMethods {
 
 
 
-    public void waitUntilPageLoad(WebElement object) throws InterruptedException{
+    public void waitUntilPageLoad(WebElement object){
         WebDriverWait wait = new WebDriverWait(driver, 15);
         wait.until(ExpectedConditions.elementToBeClickable(object));}
 
-    public void openTestingPage (String url){
+    public void openUrl(String url){
         driver.get(url);
     }
 

@@ -1,48 +1,72 @@
 package pl;
 
 
-import Tools.Mapping;
-import Tools.TestFunctions;
+import Tools.DataGenerators;
 import Tools.TestMainMethods;
 
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import java.io.File;
 
 public class ChangeProfilesFields extends TestMainMethods {
 
-    Mapping element = new Mapping();
-    TestFunctions method = new TestFunctions();
+    Mapping.TempMailSite tempMailSite = new Mapping.TempMailSite();
+    Mapping.ApartMainPage apartMainPage = new Mapping.ApartMainPage();
+    Mapping.ApartProfilePage apartProfilePage = new Mapping.ApartProfilePage();
+    DataGenerators method = new DataGenerators();
     Loging log = new Loging();
 
-    @Test (priority = 1)
-    public void openTestingPage () throws InterruptedException {
-        openTestingPage(apartLogUrl);
-        waitUntilPageLoad(element.getEmail());
+    public void openTestingPage (){
+        openUrl(apartLogUrl);
+        waitUntilPageLoad(tempMailSite.getEmail());
         Assert.assertEquals(apartLogUrl,driver.getCurrentUrl());
-        log.logingHappyPath();
+        log.loggingHappyPath();
     }
 
-    @Test (priority = 2)
+    @Test
     public void changeProfileFields (){
 
-        element.getMyAccount().click();
-        element.getMyData().click();
-        element.getChangeData().click();
+        openTestingPage();
+        apartMainPage.getMyAccount().click();
+        apartProfilePage.getMyData().click();
+        apartProfilePage.getChangeData().click();
 
-        element.getChangeFirstName().sendKeys(method.getRandomString(5));
-        element.getChangeLastName().sendKeys(method.getRandomString(5));
-        element.getChangeMobile().sendKeys(method.getRandomNumber(7));
-        element.getChangeAddress().sendKeys(method.getRandomString(5));
-        element.getChangeAddress2().sendKeys(method.getRandomString(5));
-        element.getChangeCity().sendKeys(method.getRandomString(5));
-        element.getChangePostcode().sendKeys(method.getRandomNumber(5));
-        method.randomDropdownClick(element.getChangeCountry_id());
-        element.getSafeChanges_id().click();
+        String newFirstname=method.getRandomString(5);
+        apartProfilePage.getChangeFirstName().sendKeys(newFirstname);
 
-        Assert.assertEquals(element.getSuccessAfterChanges().getText(),"Twoje zmiany zostały zapisane");
+        String newLastName=method.getRandomString(5);
+        apartProfilePage.getChangeLastName().sendKeys(newLastName);
 
+        String newMobile=method.getRandomNumber(7);
+        apartProfilePage.getChangeMobile().sendKeys(newMobile);
+
+        String newAddress=method.getRandomString(5);
+        apartProfilePage.getChangeAddress().sendKeys(newAddress);
+
+        String newAddress2=method.getRandomString(5);
+        apartProfilePage.getChangeAddress2().sendKeys(newAddress2);
+
+        String newCity=method.getRandomString(5);
+        apartProfilePage.getChangeCity().sendKeys(newCity);
+
+        String newPostcode=method.getRandomNumber(5);
+        apartProfilePage.getChangePostcode().sendKeys(newPostcode);
+
+        String newCountry=apartProfilePage.getChangeCountry_id().getText();
+        method.randomDropdownClick(apartProfilePage.getChangeCountry_id());
+
+        apartProfilePage.getSafeChanges_id().click();
+
+        Assert.assertEquals(apartProfilePage.getSuccessAfterChanges().getText(),"Twoje zmiany zostały zapisane");
+
+        Assert.assertNotEquals(newFirstname,apartProfilePage.getChangeFirstName().getText());
+        Assert.assertNotEquals(newLastName,apartProfilePage.getChangeLastName().getText());
+        Assert.assertNotEquals(newMobile,apartProfilePage.getChangeMobile().getText());
+        Assert.assertNotEquals(newAddress,apartProfilePage.getChangeAddress().getText());
+        Assert.assertNotEquals(newAddress2,apartProfilePage.getChangeAddress2().getText());
+        Assert.assertNotEquals(newCity,apartProfilePage.getChangeCity().getText());
+        Assert.assertNotEquals(newPostcode,apartProfilePage.getChangePostcode().getText());
+        Assert.assertNotEquals(newCountry,apartProfilePage.getChangeLastName().getText());
     }
 }
 

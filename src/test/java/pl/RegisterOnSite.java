@@ -1,53 +1,52 @@
 package pl;
 
-import Tools.Mapping;
-import Tools.TestFunctions;
+import Tools.DataGenerators;
 import Tools.TestMainMethods;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import java.io.FileNotFoundException;
 
 public class RegisterOnSite extends TestMainMethods {
 
-    Mapping element = new Mapping();
-    TestFunctions method = new TestFunctions();
+    Mapping.ApartMainPage apartMainPage = new Mapping.ApartMainPage();
+    Mapping.ApartLogPage apartLogPage = new Mapping.ApartLogPage();
+    DataGenerators method = new DataGenerators();
 
-    @Test
-    public void openTestingPage () throws InterruptedException {
+
+    public void openTestingPage (){
         logMail=method.copyTemporaryMail();
         logPass= method.passThePasword();
-        openTestingPage(apartUrl);
-        waitUntilPageLoad(element.getSignUpBtn());
+        openUrl(apartUrl);
+        waitUntilPageLoad(apartLogPage.getSignUpBtn());
         Assert.assertEquals(apartUrl,driver.getCurrentUrl());
 
     }
     @Test
-    public void registerHappyPath() throws FileNotFoundException {
+    public void registerHappyPath(){
 
+        openTestingPage();
+        Assert.assertNotNull(logMail);
+        Assert.assertNotNull(logPass);
+        apartMainPage.getMyApart().click();
+        apartLogPage.getEmailField().sendKeys(logMail);
+        apartLogPage.getRegisterButton().click();
 
-        Assert.assertNotEquals(logMail, null);
-        Assert.assertNotEquals(logPass,null);
-        element.getMyApart().click();
-        element.getEmailField().sendKeys(logMail);
-        element.getRegisterButton().click();
+        apartLogPage.getPassword2().sendKeys(logPass);
+        apartLogPage.getConfirmedPassword2().sendKeys(logPass);
+        method.randomClick(apartLogPage.getTytuł());
+        apartLogPage.getImię().sendKeys(method.getRandomString(5));
+        apartLogPage.getNazwisko().sendKeys(method.getRandomString(5));
+        apartLogPage.getAdres().sendKeys(method.getRandomString(5));
+        apartLogPage.getAdres2().sendKeys(method.getRandomString(5));
+        apartLogPage.getKodPocztowy().sendKeys(method.getRandomNumber(5));
+        apartLogPage.getMiejscowość().sendKeys(method.getRandomString(5));
+        apartLogPage.getTelefon().sendKeys(method.getRandomNumber(7));
+        apartLogPage.getCard().click();
+        apartLogPage.getRegulamin().click();
+        apartLogPage.getNewsleter().click();
+        apartLogPage.getNastepny1().click();
 
-        element.getPassword2().sendKeys(logPass);
-        element.getConfirmedPassword2().sendKeys(logPass);
-        method.randomClick(element.getTytuł());
-        element.getImię().sendKeys(method.getRandomString(5));
-        element.getNazwisko().sendKeys(method.getRandomString(5));
-        element.getAdres().sendKeys(method.getRandomString(5));
-        element.getAdres2().sendKeys(method.getRandomString(5));
-        element.getKodPocztowy().sendKeys(method.getRandomNumber(5));
-        element.getMiejscowość().sendKeys(method.getRandomString(5));
-        element.getTelefon().sendKeys(method.getRandomNumber(7));
-        element.getCard().click();
-        element.getRegulamin().click();
-        element.getNewsleter().click();
-        element.getNastepny1().click();
-
-        Assert.assertEquals(element.getMyAccount().getText(),"MOJE KONTO");
+        Assert.assertEquals(apartMainPage.getMyAccount().getText(),"MOJE KONTO");
         method.savePassMailToFile();
     }
 
