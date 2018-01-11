@@ -32,24 +32,31 @@ public class ChangeProfilesFields extends TestMainMethods {
         apartProfilePage.getChangeData().click();
 
         String newFirstname=method.getRandomString(5);
+        apartProfilePage.getChangeFirstName().clear();
         apartProfilePage.getChangeFirstName().sendKeys(newFirstname);
 
         String newLastName=method.getRandomString(5);
+        apartProfilePage.getChangeLastName().clear();
         apartProfilePage.getChangeLastName().sendKeys(newLastName);
 
         String newMobile=method.getRandomNumber(7);
+        apartProfilePage.getChangeMobile().clear();
         apartProfilePage.getChangeMobile().sendKeys(newMobile);
 
         String newAddress=method.getRandomString(5);
+        apartProfilePage.getChangeAddress().clear();
         apartProfilePage.getChangeAddress().sendKeys(newAddress);
 
         String newAddress2=method.getRandomString(5);
+        apartProfilePage.getChangeAddress2().clear();
         apartProfilePage.getChangeAddress2().sendKeys(newAddress2);
 
         String newCity=method.getRandomString(5);
+        apartProfilePage.getChangeCity().clear();
         apartProfilePage.getChangeCity().sendKeys(newCity);
 
         String newPostcode=method.getRandomNumber(5);
+        apartProfilePage.getChangePostcode().clear();
         apartProfilePage.getChangePostcode().sendKeys(newPostcode);
 
         String newCountry=apartProfilePage.getChangeCountry_id().getText();
@@ -59,14 +66,14 @@ public class ChangeProfilesFields extends TestMainMethods {
 
         Assert.assertEquals(apartProfilePage.getSuccessAfterChanges().getText(),"Twoje zmiany zostały zapisane");
 
-        Assert.assertNotEquals(newFirstname,apartProfilePage.getChangeFirstName().getText());
-        Assert.assertNotEquals(newLastName,apartProfilePage.getChangeLastName().getText());
-        Assert.assertNotEquals(newMobile,apartProfilePage.getChangeMobile().getText());
-        Assert.assertNotEquals(newAddress,apartProfilePage.getChangeAddress().getText());
-        Assert.assertNotEquals(newAddress2,apartProfilePage.getChangeAddress2().getText());
-        Assert.assertNotEquals(newCity,apartProfilePage.getChangeCity().getText());
-        Assert.assertNotEquals(newPostcode,apartProfilePage.getChangePostcode().getText());
-        Assert.assertNotEquals(newCountry,apartProfilePage.getChangeLastName().getText());
+        Assert.assertEquals(newFirstname,apartProfilePage.getChangeFirstName().getAttribute("value"));
+        Assert.assertEquals(newLastName,apartProfilePage.getChangeLastName().getAttribute("value"));
+        Assert.assertEquals(newMobile,apartProfilePage.getChangeMobile().getAttribute("value"));
+        Assert.assertEquals(newAddress,apartProfilePage.getChangeAddress().getAttribute("value"));
+        Assert.assertEquals(newAddress2,apartProfilePage.getChangeAddress2().getAttribute("value"));
+        Assert.assertEquals(newCity,apartProfilePage.getChangeCity().getAttribute("value"));
+        Assert.assertEquals(newPostcode,apartProfilePage.getChangePostcode().getAttribute("value"));
+        Assert.assertEquals(newCountry,apartProfilePage.getChangeCountry_id().getText());
     }
 }
 

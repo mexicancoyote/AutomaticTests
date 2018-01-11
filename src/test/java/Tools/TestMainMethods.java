@@ -21,8 +21,6 @@ public class TestMainMethods {
 
     public static WebDriver driver; //Driver that will execute the tests
 
-
-
     public void waitUntilPageLoad(WebElement object){
         WebDriverWait wait = new WebDriverWait(driver, 15);
         wait.until(ExpectedConditions.elementToBeClickable(object));}
@@ -37,7 +35,7 @@ public class TestMainMethods {
     public void afterClass() {
         driver.quit(); //Quits this driver, closing every associated window.
     }
-    //Will run before every test
+    //Will run before every Class
 
     @BeforeClass
     public void setUp() {

@@ -21,6 +21,7 @@ public class RegisterOnSite extends TestMainMethods {
         Assert.assertEquals(apartUrl,driver.getCurrentUrl());
 
     }
+    // method that register on site and also uses method which saves login and password to file
     @Test
     public void registerHappyPath(){
 
